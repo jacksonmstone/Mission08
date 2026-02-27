@@ -9,7 +9,7 @@ namespace Mission8_3_11.Models
         public int TaskItemId { get; set; }
 
         [Required]
-        public string Task { get; set; }
+        public string Task { get; set; } = string.Empty;
 
         public DateTime? DueDate { get; set; }
 
@@ -22,7 +22,7 @@ namespace Mission8_3_11.Models
         public int CategoryId { get; set; }
 
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
 
         public bool Completed { get; set; } = false;
     }

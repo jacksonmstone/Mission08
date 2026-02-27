@@ -8,9 +8,8 @@ namespace Mission8_3_11.Models
         public int CategoryId { get; set; }
 
         [Required]
-        public string CategoryName { get; set; }
-
+        public string CategoryName { get; set; } = null!;
+        
         // Navigation property
-        public List<TaskItem> Tasks { get; set; }
-    }
+        public List<TaskItem> Tasks { get; set; } = new List<TaskItem>();    }
 }

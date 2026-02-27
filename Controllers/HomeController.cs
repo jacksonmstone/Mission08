@@ -32,16 +32,20 @@ namespace Mission8_3_11.Controllers
         // POST /Home/Add
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Add(TaskItem task)
+        public IActionResult Add(string Task, int Quadrant, int CategoryId, DateTime? DueDate)
         {
-            if (ModelState.IsValid)
+            var taskItem = new TaskItem
             {
-                _repo.AddTask(task);
-                _repo.Save();
-                return RedirectToAction(nameof(Index));
-            }
-            PopulateCategoryDropdown();
-            return View(task);
+                Task = Task,
+                Quadrant = Quadrant,
+                CategoryId = CategoryId,
+                DueDate = DueDate
+            };
+
+            _repo.AddTask(taskItem);
+            _repo.Save();
+
+            return RedirectToAction(nameof(Index));
         }
 
         // ── EDIT ─────────────────────────────────────────────────────────────
@@ -59,16 +63,27 @@ namespace Mission8_3_11.Controllers
         // POST /Home/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(TaskItem task)
+        public IActionResult Edit(int TaskItemId, string Task, int Quadrant, int CategoryId, DateTime? DueDate, bool Completed = false)
         {
-            if (ModelState.IsValid)
+            // Get the tracked entity from the database
+            var existingTask = _repo.GetTrackedTaskById(TaskItemId);
+            if (existingTask == null)
             {
-                _repo.UpdateTask(task);
-                _repo.Save();
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            PopulateCategoryDropdown();
-            return View(task);
+
+            // Update properties
+            existingTask.Task = Task;
+            existingTask.Quadrant = Quadrant;
+            existingTask.CategoryId = CategoryId;
+            existingTask.DueDate = DueDate;
+            existingTask.Completed = Completed;
+
+            // Save changes to database
+            _repo.Save();
+
+            // Redirect to Index
+            return RedirectToAction(nameof(Index));
         }
 
         // ── DELETE ───────────────────────────────────────────────────────────
