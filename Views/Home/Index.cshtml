@@ -1,8 +1,93 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<Mission8_3_11.Models.TaskItem>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{
+    ViewData["Title"] = "Quadrants";
+}
+<h1 class="mb-4 text-center">Time Management Matrix</h1>
+
+<div class="row g-4">
+
+    <!-- Quadrant I -->
+    <div class="col-md-6">
+        <div class="card border-danger h-100">
+            <div class="card-header bg-danger text-white">
+                <strong>Quadrant I</strong> – Important / Urgent
+            </div>
+            <div class="card-body">
+                @foreach (var task in Model.Where(t => t.Quadrant == 1 && !t.Completed))
+                {
+                    <div class="mb-3 p-2 border rounded">
+                        <div><strong>@task.Task</strong></div>
+                        <div class="small text-muted">
+                            Due: @(task.DueDate?.ToShortDateString() ?? "No due date")
+                            | Category: @task.Category?.CategoryName
+                        </div>
+
+                        <div class="mt-2 d-flex gap-2">
+                            <a asp-action="Edit" asp-route-id="@task.TaskItemId"
+                               class="btn btn-sm btn-outline-primary">Edit</a>
+
+                            <form asp-action="Delete" asp-route-id="@task.TaskItemId" method="post">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Quadrant II -->
+    <div class="col-md-6">
+        <div class="card border-primary h-100">
+            <div class="card-header bg-primary text-white">
+                <strong>Quadrant II</strong> – Important / Not Urgent
+            </div>
+            <div class="card-body">
+                @foreach (var task in Model.Where(t => t.Quadrant == 2 && !t.Completed))
+                {
+                    <div class="mb-3 p-2 border rounded">
+                        <strong>@task.Task</strong>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Quadrant III -->
+    <div class="col-md-6">
+        <div class="card border-warning h-100">
+            <div class="card-header bg-warning">
+                <strong>Quadrant III</strong> – Not Important / Urgent
+            </div>
+            <div class="card-body">
+                @foreach (var task in Model.Where(t => t.Quadrant == 3 && !t.Completed))
+                {
+                    <div class="mb-3 p-2 border rounded">
+                        <strong>@task.Task</strong>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Quadrant IV -->
+    <div class="col-md-6">
+        <div class="card border-secondary h-100">
+            <div class="card-header bg-secondary text-white">
+                <strong>Quadrant IV</strong> – Not Important / Not Urgent
+            </div>
+            <div class="card-body">
+                @foreach (var task in Model.Where(t => t.Quadrant == 4 && !t.Completed))
+                {
+                    <div class="mb-3 p-2 border rounded">
+                        <strong>@task.Task</strong>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
 </div>

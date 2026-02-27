@@ -13,7 +13,7 @@ namespace Mission8_3_11.Models
             _context = context;
         }
 
-        // Include Category so views can display CategoryName without extra queries
+        // This satisfies the interface for Index view
         public List<TaskItem> Tasks => _context.Tasks.Include(t => t.Category).ToList();
 
         public List<Category> Categories => _context.Categories.ToList();
@@ -36,6 +36,12 @@ namespace Mission8_3_11.Models
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        // NEW: fetch a tracked entity for editing (not part of interface)
+        public TaskItem? GetTrackedTaskById(int id)
+        {
+            return _context.Tasks.Include(t => t.Category).FirstOrDefault(t => t.TaskItemId == id);
         }
     }
 }
